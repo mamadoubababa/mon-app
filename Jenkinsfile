@@ -3,8 +3,17 @@ pipeline {
 
     environment {
         APP_VERSION = "1.0.${BUILD_NUMBER}"
-        PATH = "/usr/bin:${PATH}"
+        PATH = "/usr/bin:${env.PATH}"
     }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                echo 'Récupération du code depuis GitHub...'
+                checkout scm
+            }
+        }
 
         stage('Install') {
             steps {
@@ -38,11 +47,9 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                echo 'Déploiement...'
-                sh '''
-                    cp -r frontend/dist /var/www/mon-app || true
-                    cd backend && pm2 restart mon-app || pm2 start server.js --name mon-app
-                '''
+                echo 'Déploiement en cours...'
+                sh 'mkdir -p /var/www/mon-app'
+                sh 'cp -r frontend/dist/* /var/www/mon-app/'
             }
         }
     }
