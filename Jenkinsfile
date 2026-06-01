@@ -3,16 +3,8 @@ pipeline {
 
     environment {
         APP_VERSION = "1.0.${BUILD_NUMBER}"
+        PATH = "/usr/bin:${PATH}"
     }
-
-    stages {
-
-        stage('Checkout') {
-            steps {
-                echo 'Récupération du code depuis GitHub...'
-                checkout scm
-            }
-        }
 
         stage('Install') {
             steps {
